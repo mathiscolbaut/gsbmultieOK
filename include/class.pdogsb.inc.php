@@ -1,26 +1,10 @@
 <?php
 
-/** 
- * Classe d'accÃ¨s aux donnÃ©es. 
- 
- * Utilise les services de la classe PDO
- * pour l'application GSB
- * Les attributs sont tous statiques,
- * les 4 premiers pour la connexion
- * $monPdo de type PDO 
- * $monPdoGsb qui contiendra l'unique instance de la classe
- 
- * @package default
- * @author Cheri Bibi
- * @version    1.0
- * @link       http://www.php.net/manual/fr/book.pdo.php
- */
-
 class PdoGsb{   		
-      	private static $serveur='mysql:host=remi-becquaert.fr';
-      	private static $bdd='dbname=gsb2';
-      	private static $user='gsb2' ;
-      	private static $mdp='gsbextranetgroupe' ;
+    private static $serveur='mysql:host=remi-becquaert.fr';
+    private static $bdd='dbname=gsbextranetgroupe';
+    private static $user='gsb2';
+    private static $mdp='gsb2';
 	private static $monPdo;
 	private static $monPdoGsb=null;
 		
@@ -96,28 +80,38 @@ return $unUser;
 
 public function tailleChampsMail(){
     
-
-    
-     $pdoStatement = PdoGsb::$monPdo->prepare("SELECT CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS
-WHERE table_name = 'medecin' AND COLUMN_NAME = 'mail'");
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE table_name = 'medecin' AND COLUMN_NAME = 'mail'");
     $execution = $pdoStatement->execute();
-$leResultat = $pdoStatement->fetch();
-      
-      return $leResultat[0];
-    
-       
-       
+    $leResultat = $pdoStatement->fetch();  
+    return $leResultat[0];
+}
+
+public function tailleChampsNom(){
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'medecin' AND
+    COLUMN_NAME = 'nom'");
+    $execution = $pdoStatement->execute();
+    $leResultat = $pdoStatement->fetch();  
+    return $leResultat[0];
+}
+
+public function tailleChampsPrenom(){
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'medecin' AND
+    COLUMN_NAME = 'prenom'");
+    $execution = $pdoStatement->execute();
+    $leResultat = $pdoStatement->fetch();  
+    return $leResultat[0];
 }
 
 
-public function creeMedecin($email, $mdp)
+public function creeMedecin($email, $nom, $prenom, $mdp)
 {
-   
-    $pdoStatement = PdoGsb::$monPdo->prepare("INSERT INTO medecin(id,mail, motDePasse,dateCreation,dateConsentement) "
-            . "VALUES (null, :leMail, :leMdp, now(),now())");
+    $pdoStatement = PdoGsb::$monPdo->prepare("INSERT INTO medecin(id,mail,nom,prenom, motDePasse,dateCreation,dateConsentement) "
+            . "VALUES (null, :leMail, :leNom, :lePrenom, :leMdp, now(),now())");
     $bv1 = $pdoStatement->bindValue(':leMail', $email);
-   
-    $bv2 = $pdoStatement->bindValue(':leMdp', $mdp);
+    $bv2 = $pdoStatement->bindValue(':leNom', $nom);
+    $bv3 = $pdoStatement->bindValue(':lePrenom', $prenom);
+    $bv4 = $pdoStatement->bindValue(':leMdp', $mdp);
     $execution = $pdoStatement->execute();
     return $execution;
     

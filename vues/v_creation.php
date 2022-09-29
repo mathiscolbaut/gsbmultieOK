@@ -26,25 +26,22 @@
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4">
 			<div class="login-wrapper">
-				<div class="box">
-						
-                                    <div class="content-wrap">
+				<div class="box">	
+          <div class="content-wrap">
 						<legend>je suis médecin, je souhaite créer un compte</legend>
 							<form method="post" action="index.php?uc=creation&action=valideCreation">
-                                <input name="login" class="form-control" type="email" placeholder="mail"/>
-							    <input name="mdp" class="form-control" type="password" placeholder="password"/>
-                                <input name="prénom" class="form-control" type="text" placeholder="prénom"/>
-                                <input name="nom" class="form-control" type="text" placeholder="nom"/>
-								<br>
-                                <input type="checkbox" class="form-control" required="required" style="height: 30px;width: 30px;margin-left: 45%;">
-                                <p>J'atteste avoir lu et accepte notre</p>
-                                <a href="http://localhost/gsb/vues/v_politiqueprotectiondonnees.php" target="_blank" >politique de protection des données</a>
-                                <br>
-                                <input type="submit" class="btn btn-primary signup" value="Créer"/>
-
-                            </form>
-							</br>
-						
+                  <input name="login" class="form-control" type="email" placeholder="Mail"/>
+							    <input name="mdp" class="form-control" type="password" placeholder="Mot de passe"/>
+                  <input name="prenom" class="form-control" type="text" placeholder="Prénom"/>
+                  <input name="nom" class="form-control" type="text" placeholder="Nom"/>
+								  <br>
+                  <input type="checkbox" class="form-control" required="required" style="height: 30px;width: 30px;margin-left: 45%;">
+                  <p>J'atteste avoir lu et accepte notre</p>
+                  <a href="http://localhost/gsb/vues/v_politiqueprotectiondonnees.php" target="_blank" >politique de protection des données</a>
+                  <br>
+                  <input type="submit" class="btn btn-primary signup" value="Créer"/>
+                </form>
+							</br>						
 					</div>	
 				</div>
 			</div>

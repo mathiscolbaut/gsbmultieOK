@@ -54,8 +54,9 @@ switch($action){
         break;
     }
     case 'deco':{
+        $pdo->ajouterDeconnection($_SESSION["id"],$_SESSION["dateDebut"]);
+        session_unset();
         session_destroy();
-        ajouterDeconnection($_SESSION["id"],$_SESSION["dateDebut"]);
 
         echo "Vous êtes déco";
         include "vues/v_connexion.php";
