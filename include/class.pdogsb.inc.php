@@ -96,13 +96,53 @@ public function tailleChampsNom(){
     $leResultat = $pdoStatement->fetch();  
     return $leResultat[0];
 }
-
-public function tailleChampsPrenom(){
+public function tailleChampsPrenom()
+{
     $pdoStatement = PdoGsb::$monPdo->prepare("SELECT CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'medecin' AND
-    COLUMN_NAME = 'prenom'");
+COLUMN_NAME = 'prenom'");
     $execution = $pdoStatement->execute();
-    $leResultat = $pdoStatement->fetch();  
+    $leResultat = $pdoStatement->fetch();
     return $leResultat[0];
+}
+//La fonction envoieOtp va permettre
+//d'envoyer un code de verification par mail aux utilisateurs
+//pour pouvoir confirmer leur connection (double authentification)
+
+public function envoieOtp($mail){
+    $codeRandom = rand(100000,999999);
+    $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE medecin set otp = :code WHERE mail = :mail ");
+    $bv1 = $pdoStatement->bindValue(':code', $codeRandom);
+
+    $bv2 = $pdoStatement->bindValue(':mail', $mail);
+    $execution = $pdoStatement->execute();
+
+    $to = $mail;
+    $subject = 'GSB - CODE OPT 1 minutes';
+    $message = 'Bonjour voici votre code OPT : ' . $codeRandom;
+    $headers = 'From: verif@gsb.fr' . "\r\n" .
+        'Reply-To: webmaster@example.com' . "\r\n" .
+        'X-Mailer: PHP/' . phpversion();
+
+    mail($to, $subject, $message, $headers);
+
+    return $execution;
+}
+
+public function verifOpt($mail ,$codeOtp){
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT otp FROM medecin WHERE mail = :leMail");
+    $bv1 = $pdoStatement->bindValue(':leMail', $mail);
+    $execution = $pdoStatement->execute();
+
+
+    $resultatRequete = $pdoStatement->fetch();
+
+    if ($resultatRequete['otp']==$codeOtp)
+        $codeBon = true;
+    else
+        $codeBon=false;
+
+    return $codeBon;
+
 }
 
 
