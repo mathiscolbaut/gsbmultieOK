@@ -18,9 +18,9 @@
 
 class PdoGsb{   		
       	private static $serveur='mysql:host=remi-becquaert.fr';
-      	private static $bdd='dbname=gsb2';
+      	private static $bdd='dbname=gsbextranetgroupe';
       	private static $user='gsb2' ;
-      	private static $mdp='gsbextranetgroupe' ;
+      	private static $mdp='gsb2' ;
 	private static $monPdo;
 	private static $monPdoGsb=null;
 		
