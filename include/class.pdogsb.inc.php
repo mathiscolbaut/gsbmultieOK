@@ -48,11 +48,13 @@ function checkUser($login,$pwd):bool {
     $pdo = PdoGsb::$monPdo;
     $monObjPdoStatement=$pdo->prepare("SELECT motDePasse FROM medecin WHERE mail= :login AND token IS NULL");
     $bvc1=$monObjPdoStatement->bindValue(':login',$login,PDO::PARAM_STR);
+    
     if ($monObjPdoStatement->execute()) {
         $unUser=$monObjPdoStatement->fetch();
         if (is_array($unUser)){
-           if ($pwd==$unUser['motDePasse'])
-                $user=true;
+           if (password_verify($pwd, $unUser['motDePasse'])){
+            $user=true;
+           }
         }
     }
     else
