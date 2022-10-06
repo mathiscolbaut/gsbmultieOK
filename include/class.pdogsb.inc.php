@@ -117,10 +117,10 @@ public function envoieOtp($mail){
     $execution = $pdoStatement->execute();
 
     $to = $mail;
-    $subject = 'GSB - CODE OPT 1 minutes';
-    $message = 'Bonjour voici votre code OPT : ' . $codeRandom;
+    $subject = 'GSB - CODE OTP 1 minutes';
+    $message = 'Bonjour voici votre code OTP : ' . $codeRandom;
     $headers = 'From: verif@gsb.fr' . "\r\n" .
-        'Reply-To: webmaster@example.com' . "\r\n" .
+        'Reply-To: verif@gsb.fr' . "\r\n" .
         'X-Mailer: PHP/' . phpversion();
 
     mail($to, $subject, $message, $headers);

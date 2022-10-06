@@ -32,11 +32,14 @@ switch($action){
 
         $code = $_POST['code'];
 
+       
 
-
-        if($pdo->verifOpt($_SESSION['login'],$code) == true){
+         if($pdo->verifOpt($_SESSION['login'],$code) == true){
             $login = $_SESSION['login'];
             $mdp = $_SESSION['mdp'];
+
+          
+            
             $connexionOk = $pdo->checkUser($login,$mdp);
 
             if(!$connexionOk){
