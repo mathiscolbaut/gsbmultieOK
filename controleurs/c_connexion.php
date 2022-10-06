@@ -44,7 +44,7 @@ switch($action){
 
             if(!$connexionOk){
                 ajouterErreur("Login ou mot de passe incorrect");
-                include("vues/v_erreurs.php");
+                include("vues/v_sommaire.php");
                 include("vues/v_connexion.php");
             }
             else {
@@ -59,18 +59,19 @@ switch($action){
 
                 include_once "vues/v_sommaire.php";
             }
-            break;
-        }
+            
+         }
 
-        else{
-                echo "CODE OPT INCORRECT";
+         else{
+                echo "<script>alert(\"Le Code OTP n'est plus valide (plus de 1 minute)\")</script>";
+                include("vues/v_connexion.php");
 
             }
 
 
 
 
-
+        break;
         }
     case 'accueil':{
         include "vues/v_sommaire.php";

@@ -109,8 +109,12 @@ COLUMN_NAME = 'prenom'");
 //pour pouvoir confirmer leur connection (double authentification)
 
 public function envoieOtp($mail){
+
+   
+
+
     $codeRandom = rand(100000,999999);
-    $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE medecin set otp = :code WHERE mail = :mail ");
+    $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE medecin set otp = :code, tempOTP = now() WHERE mail = :mail ");
     $bv1 = $pdoStatement->bindValue(':code', $codeRandom);
 
     $bv2 = $pdoStatement->bindValue(':mail', $mail);
@@ -129,17 +133,35 @@ public function envoieOtp($mail){
 }
 
 public function verifOpt($mail ,$codeOtp){
-    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT otp FROM medecin WHERE mail = :leMail");
+
+   // $codeBon=false;
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT otp,tempOTP FROM medecin WHERE mail = :leMail");
     $bv1 = $pdoStatement->bindValue(':leMail', $mail);
     $execution = $pdoStatement->execute();
 
 
     $resultatRequete = $pdoStatement->fetch();
 
-    if ($resultatRequete['otp']==$codeOtp)
+  
+    
+
+    $datetime = new DateTime($resultatRequete['tempOTP']);
+    $datetime->modify('+1 minute');
+    
+    $dateNow = new DateTime(date("Y-m-d H:i:s"));
+  
+    if($dateNow < $datetime)
+    {
+        if ($resultatRequete['otp']==$codeOtp)
         $codeBon = true;
-    else
-        $codeBon=false;
+        else
+            $codeBon=false;
+
+    }
+    else{
+       
+        $codeBon = false;
+    }
 
     return $codeBon;
 
