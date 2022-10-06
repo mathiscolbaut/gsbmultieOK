@@ -17,6 +17,8 @@ switch($action){
         $lePassword = htmlspecialchars($_POST['mdp']);
         $lePrenom = htmlspecialchars($_POST['prenom']);
         $leNom = htmlspecialchars($_POST['nom']);
+        $idRole = $_POST['idRole'];
+        
         
         if ($leLogin == $_POST['login'])
         {
@@ -98,9 +100,7 @@ switch($action){
         }
         if($rempli && $loginOk && $passwordOk && $nomOk && $prenomOk){
                 echo 'tout est ok, nous allons pouvoir créer votre compte...<br/>';
-                $executionOK = $pdo->creeMedecin($leLogin,$leNom,$lePrenom,password_hash($lePassword, PASSWORD_DEFAULT));
-                $executionOK = $pdo->creeMedecin($leLogin,$leNom,$lePrenom,$lePassword);
-                $executionOK = $pdo->creeMedecin($leLogin,$lePassword);
+                $executionOK = $pdo->creeMedecin($leLogin,$leNom,$lePrenom,password_hash($lePassword, PASSWORD_DEFAULT),$idRole);
 
                 $pdo->connexionInitiale($leLogin);
 

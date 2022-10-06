@@ -34,7 +34,13 @@
 							    <input name="mdp" class="form-control" type="password" placeholder="Mot de passe"/>
                   <input name="prenom" class="form-control" type="text" placeholder="Prénom"/>
                   <input name="nom" class="form-control" type="text" placeholder="Nom"/>
-								  <br>
+                  
+                  <select class="form-control" name="idRole">
+                    <option value=1>Médecin</option>
+                    <option value=4>Chef de produit</option>
+                  </select>
+								  
+                  <br>
                   <input type="checkbox" class="form-control" required="required" style="height: 30px;width: 30px;margin-left: 45%;">
                   <p>J'atteste avoir lu et accepte notre</p>
                   <a href="http://localhost/gsb/vues/v_politiqueprotectiondonnees.php" target="_blank" >politique de protection des données</a>

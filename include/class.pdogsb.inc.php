@@ -146,14 +146,16 @@ public function verifOpt($mail ,$codeOtp){
 }
 
 
-public function creeMedecin($email, $nom, $prenom, $mdp)
+public function creeMedecin($email, $nom, $prenom, $mdp, $idRole)
 {
-    $pdoStatement = PdoGsb::$monPdo->prepare("INSERT INTO medecin(id,mail,nom,prenom, motDePasse,dateCreation,dateConsentement) "
-            . "VALUES (null, :leMail, :leNom, :lePrenom, :leMdp, now(),now())");
+    $pdoStatement = PdoGsb::$monPdo->prepare("INSERT INTO medecin(id,mail,nom,prenom, motDePasse,dateCreation,dateConsentement,idRole) "
+            . "VALUES (null, :leMail, :leNom, :lePrenom, :leMdp, now(),now(),:lIdRole)");
     $bv1 = $pdoStatement->bindValue(':leMail', $email);
     $bv2 = $pdoStatement->bindValue(':leNom', $nom);
     $bv3 = $pdoStatement->bindValue(':lePrenom', $prenom);
     $bv4 = $pdoStatement->bindValue(':leMdp', $mdp);
+    $bv5 = $pdoStatement->bindValue(':lIdRole',$idRole);
+
     $execution = $pdoStatement->execute();
     return $execution;
     
