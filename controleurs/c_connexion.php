@@ -52,9 +52,8 @@ switch($action){
                 $id = $infosMedecin['id'];
                 $nom = $infosMedecin['nom'];
                 $prenom = $infosMedecin['prenom'];
-                connecter($id, $nom, $prenom);
-                $_SESSION["id"]=$id;
-                $_SESSION["id"]=$id;
+                $idRole = $infosMedecin['idRole'];
+                connecter($id, $nom, $prenom, $idRole);
 
                 $datenow = $pdo->ajouteConnexionInitiale($id);
 

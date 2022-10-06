@@ -27,40 +27,9 @@ else {
     <![endif]-->
 </head>
 <body background="assets/img/laboratoire.jpg">
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="index.php?uc=connexion&action=accueil">Galaxy Swiss Bourdin</a>
-        </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
+<?php include('v_navbar.php');?>
 
-                <li class="active"><a href="index.php?uc=etatFrais&action=selectionnerMois">M'inscrire à une visio</a></li>
-                <li class=""><a href="index.php?uc=modification&action=changeinformation&page=modif">Modifier vos informations</a></li>
-                <li class="active"><a href="">LELLELELELEL</a></li>
-
-
-            </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                <a style="margin-top: 3%" class="btn btn-danger" href="index.php?uc=connexion&action=deco" role="button">Logout</a>
-                <li><a><?php echo $_SESSION['prenom']."  ".$_SESSION['nom']?></a></li>
-                <li><a>Médecin</a></li>
-
-
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
 
 
     <form style="background: white;width: 30%;text-align: center;margin-left: 35%;border-radius: 10px;"  method="post"  action="index.php?uc=modification&action=valider">

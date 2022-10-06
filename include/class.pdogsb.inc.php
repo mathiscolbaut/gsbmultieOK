@@ -68,7 +68,7 @@ return $user;
 function donneLeMedecinByMail($login) {
     
     $pdo = PdoGsb::$monPdo;
-    $monObjPdoStatement=$pdo->prepare("SELECT id, nom, prenom,mail FROM medecin WHERE mail= :login");
+    $monObjPdoStatement=$pdo->prepare("SELECT id, nom, prenom,mail,idRole FROM medecin WHERE mail= :login");
     $bvc1=$monObjPdoStatement->bindValue(':login',$login,PDO::PARAM_STR);
     if ($monObjPdoStatement->execute()) {
         $unUser=$monObjPdoStatement->fetch();
