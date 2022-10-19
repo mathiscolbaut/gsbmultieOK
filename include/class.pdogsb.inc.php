@@ -245,9 +245,20 @@ function donneinfosmedecin($id){
 function changeinfosmedecin($id,$nom,$prenom,$password){
 
     $pdo = PdoGsb::$monPdo;
-    $sql = "UPDATE medecin SET nom=?, prenom=?, motDePasse=? WHERE id=?";
-    $stmt= $pdo->prepare($sql);
-    $stmt->execute([$nom, $prenom, $password, $id]);
+
+    //permet de modifier les infos sans re-hash un nouveau mot de passe
+    if(strlen($password) == 0){
+        $sql = "UPDATE medecin SET nom=?, prenom=? WHERE id=?";
+        $stmt= $pdo->prepare($sql);
+        $stmt->execute([$nom, $prenom, $id]);
+        echo '2';
+    } else { //Dans ce cas le mot de passe est demandé modifié via $password, on le modifie
+        $sql = "UPDATE medecin SET nom=?, prenom=?, motDePasse=? WHERE id=?";
+        $stmt= $pdo->prepare($sql);
+        $stmt->execute([$nom, $prenom, $password, $id]);
+        echo '3';
+    }
+
 
 
 

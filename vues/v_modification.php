@@ -48,12 +48,12 @@ else {
         </div>
 
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input style="width: 50%;margin-left: 25%" type="password" placeholder="" name="mdp" value="<?php echo $_SESSION['leBonMdp'];?>" class="form-control" id="exampleInputPassword1">
+            <label for="exampleInputPassword1" class="form-label">Nouveau  Password</label>
+            <input style="width: 50%;margin-left: 25%" type="password" placeholder="" name="mdp" class="form-control" id="exampleInputPassword1">
         </div>
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Recopier Password</label>
-            <input style="width: 50%;margin-left: 25%" type="password" placeholder="" name="mdpverif" value="<?php echo $_SESSION['mdp2'];?>" class="form-control" id="exampleInputPassword1">
+            <label for="exampleInputPassword1" class="form-label">Recopier le nouveau Password</label>
+            <input style="width: 50%;margin-left: 25%" type="password" placeholder="" name="mdpverif" class="form-control" id="exampleInputPassword1">
         </div>
         <br>
         <button type="submit" name="button" class="btn btn-primary">Submit</button>
