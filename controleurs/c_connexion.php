@@ -17,12 +17,18 @@ switch($action){
         $login = $_POST['login'];
         $mdp = $_POST['mdp'];
 
-        $_SESSION['login'] = $login;
-        $_SESSION['mdp'] = $mdp;
 
-        $pdo->envoieOtp($login);
+        if($pdo->verifierSiValider($login)) {
+            $_SESSION['login'] = $login;
+            $_SESSION['mdp'] = $mdp;
 
-        include_once "vues/v_codeVerif.php";
+            $pdo->envoieOtp($login);
+
+            include_once "vues/v_codeVerif.php";
+        } else {
+            echo "Veuillez valider votre compte avant de pouvoir accéder au site.";
+        }
+
 
 
         break;
@@ -31,7 +37,6 @@ switch($action){
 	case 'valideConnexion':{
 
         $code = $_POST['code'];
-
        
 
          if($pdo->verifOpt($_SESSION['login'],$code) == true){
