@@ -116,8 +116,13 @@ switch($action){
 
 			
         
-        break;	
-}
+    break;	
+    }
+    case 'creationAdmin':{
+        include("vues/v_creationAdmin.php");
+        break;
+    }
+
 	default :{
 		include("vues/v_connexion.php");
 		break;

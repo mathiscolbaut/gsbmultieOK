@@ -81,6 +81,7 @@
         <li class="active"><a href="#">Vérifier les avis</a></li>
         <li><a href="#">Validation compte médecin</a></li>
         <li class="active"><a href="#">Maintenance</a></li>
+        <li class="active"><a href="index.php?uc=creation&action=creationAdmin">Créer un compte</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Voir logs

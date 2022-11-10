@@ -30,7 +30,11 @@ switch($uc){
 		include("controleurs/c_creation.php");break;
 	}
 	case 'modification':{
-		include("controleurs/c_mofication.php");;break;
+		include("controleurs/c_mofication.php");break;
+	}
+
+	case 'notfound':{
+		include("controleurs/c_notfound.php");break;
 	}
 
 	
