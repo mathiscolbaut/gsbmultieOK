@@ -43,19 +43,20 @@ if($estConnecte){
             $pass = $_POST['mdp'];
             $passVerif = $_POST['mdpverif'];
 
-            if($pass == $passVerif){
-                $lePdo->changeinfosmedecin($id, $nom, $prenom, $pass);
+            if(strlen($pass > 0)) {
 
-                echo "Les modifications on bien été prise en compte";
-                $_SESSION['nom'] = $nom;
-                $_SESSION['prenom'] = $prenom;
-                include "vues/v_sommaire.php";
+                if ($pass != $passVerif) {
+                    echo "Les mots de passe ne corresponde pas!";
+                    return;
+                }
             }
-            else
-            {
 
-                echo "Les mots de passe ne corresponde pas!";
-            }
+            $lePdo->changeinfosmedecin($id, $nom, $prenom, strlen($pass > 0) ? password_hash($pass, PASSWORD_DEFAULT) : "");
+
+            echo "Les modifications on bien été prise en compte";
+            $_SESSION['nom'] = $nom;
+            $_SESSION['prenom'] = $prenom;
+            include "vues/v_sommaire.php";
 
 
 

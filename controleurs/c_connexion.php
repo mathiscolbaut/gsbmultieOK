@@ -17,12 +17,18 @@ switch($action){
         $login = $_POST['login'];
         $mdp = $_POST['mdp'];
 
-        $_SESSION['login'] = $login;
-        $_SESSION['mdp'] = $mdp;
 
-        $pdo->envoieOtp($login);
+        if($pdo->verifierSiValider($login)) {
+            $_SESSION['login'] = $login;
+            $_SESSION['mdp'] = $mdp;
 
-        include_once "vues/v_codeVerif.php";
+            $pdo->envoieOtp($login);
+
+            include_once "vues/v_codeVerif.php";
+        } else {
+            echo "Veuillez valider votre compte avant de pouvoir accéder au site.";
+        }
+
 
 
         break;
@@ -31,7 +37,6 @@ switch($action){
 	case 'valideConnexion':{
 
         $code = $_POST['code'];
-
        
 
          if($pdo->verifOpt($_SESSION['login'],$code) == true){
@@ -44,7 +49,7 @@ switch($action){
 
             if(!$connexionOk){
                 ajouterErreur("Login ou mot de passe incorrect");
-                include("vues/v_erreurs.php");
+                include("vues/v_sommaire.php");
                 include("vues/v_connexion.php");
             }
             else {
@@ -59,18 +64,19 @@ switch($action){
 
                 include_once "vues/v_sommaire.php";
             }
-            break;
-        }
+            
+         }
 
-        else{
-                echo "CODE OPT INCORRECT";
+         else{
+                echo "<script>alert(\"Le Code OTP n'est plus valide (plus de 1 minute)\")</script>";
+                include("vues/v_connexion.php");
 
             }
 
 
 
 
-
+        break;
         }
     case 'accueil':{
         include "vues/v_sommaire.php";

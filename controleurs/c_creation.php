@@ -11,6 +11,23 @@ switch($action){
 		include("vues/v_creation.php");
 		break;
 	}
+    case  "valideToken":{
+        $token = $_GET['token'];
+        $mail = $_GET['mail'];
+
+        if($pdo->verifToken($mail, $token)) {
+            echo "Compte verifier!";
+            include "vues/v_gohome.php";
+        }
+        break;
+    }
+    case  "creerToken":{
+        $email = $_GET['email'];
+        echo $email;
+        $pdo->envoieToken($email);
+
+        break;
+    }
 	case 'valideCreation':{
 		           
 		$leLogin = htmlspecialchars($_POST['login']);
@@ -107,8 +124,9 @@ switch($action){
 
 
                 if ($executionOK==true){
-                    echo "c'est bon, votre compte a bien été créé ;-)";
-                    $pdo->connexionInitiale($leLogin);
+                    echo "c'est bon, votre compte a bien été créé, veuillez le verifier, checkez votre email! ;-)";
+                    //$pdo->connexionInitiale($leLogin);
+                    $pdo->envoieToken($leLogin);
                 }   
                 else
                      echo "ce login existe déjà, veuillez en choisir un autre";

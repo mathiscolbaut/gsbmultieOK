@@ -109,8 +109,9 @@ COLUMN_NAME = 'prenom'");
 //pour pouvoir confirmer leur connection (double authentification)
 
 public function envoieOtp($mail){
+
     $codeRandom = rand(100000,999999);
-    $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE medecin set otp = :code WHERE mail = :mail ");
+    $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE medecin set otp = :code, tempOTP = now() WHERE mail = :mail ");
     $bv1 = $pdoStatement->bindValue(':code', $codeRandom);
 
     $bv2 = $pdoStatement->bindValue(':mail', $mail);
@@ -128,18 +129,116 @@ public function envoieOtp($mail){
     return $execution;
 }
 
+public function envoieToken($mail){
+
+    $codeRandom = $this->generateRandomString(20);
+    $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE medecin set token = :code, tokenDate = now() WHERE mail = :mail ");
+    $bv1 = $pdoStatement->bindValue(':code', $codeRandom);
+
+    $bv2 = $pdoStatement->bindValue(':mail', $mail);
+    $execution = $pdoStatement->execute();
+
+    $to = $mail;
+    $subject = 'GSB - Confirmer votre compte';
+    $message = 'Bonjour veuillez confirmer votre compte ici : http://localhost:8888/Quesque/GSBMulti/index.php?uc=creation&action=valideToken&mail='.$mail.'&token=' . $codeRandom."\n\nVous pouvez aussi confirmer votre compte via le code: ".$codeRandom;
+    $headers = 'From: verif@gsb.fr' . "\r\n" .
+        'Reply-To: verif@gsb.fr' . "\r\n" .
+        'X-Mailer: PHP/' . phpversion();
+
+    mail($to, $subject, $message, $headers);
+
+    return $execution;
+}
+
+function verifierSiValider($mail) {
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT token,tokenDate FROM medecin WHERE mail = :leMail");
+    $bv1 = $pdoStatement->bindValue(':leMail', $mail);
+    $execution = $pdoStatement->execute();
+    $resultatRequete = $pdoStatement->fetch();
+
+    return $resultatRequete['token'] == null;
+}
+
+function verifToken($mail, $token) {
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT token,tokenDate FROM medecin WHERE mail = :leMail");
+    $bv1 = $pdoStatement->bindValue(':leMail', $mail);
+    $execution = $pdoStatement->execute();
+    $resultatRequete = $pdoStatement->fetch();
+
+    if(!$execution) {
+        echo "Erreur dans la requête";
+        return false;
+    }
+    if($resultatRequete['token'] == null) {
+        echo 'Votre compte à déjà verifié';
+        return false;
+    }
+
+
+    $d1 = strtotime("now");
+    $d2 = (strtotime($resultatRequete['tokenDate']));
+
+
+
+    //La date du token est trop vieux, on en renvoie un
+    //24 heures en secondes *24
+    if(($d1-$d2) >(3600*24))
+    {
+        $this->envoieToken($mail);
+        echo 'Code trop vieux, vous allez recevoir un nouveau code';
+    } else {
+        if($resultatRequete['token']==$token) {
+            $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE medecin set token = NULL WHERE mail = :mail ");
+            $bv2 = $pdoStatement->bindValue(':mail', $mail);
+            $execution = $pdoStatement->execute();
+            return true;
+        } else {
+            echo 'Erreur, le token indiqué est incorrect';
+        }
+    }
+    return false;
+}
+
+function generateRandomString($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+
 public function verifOpt($mail ,$codeOtp){
-    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT otp FROM medecin WHERE mail = :leMail");
+
+   // $codeBon=false;
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT otp,tempOTP FROM medecin WHERE mail = :leMail");
     $bv1 = $pdoStatement->bindValue(':leMail', $mail);
     $execution = $pdoStatement->execute();
 
 
     $resultatRequete = $pdoStatement->fetch();
 
-    if ($resultatRequete['otp']==$codeOtp)
+  
+    
+
+    $datetime = new DateTime($resultatRequete['tempOTP']);
+    $datetime->modify('+1 minute');
+    
+    $dateNow = new DateTime(date("Y-m-d H:i:s"));
+  
+    if($dateNow < $datetime)
+    {
+        if ($resultatRequete['otp']==$codeOtp)
         $codeBon = true;
-    else
-        $codeBon=false;
+        else
+            $codeBon=false;
+
+    }
+    else{
+       
+        $codeBon = false;
+    }
 
     return $codeBon;
 
@@ -223,9 +322,20 @@ function donneinfosmedecin($id){
 function changeinfosmedecin($id,$nom,$prenom,$password){
 
     $pdo = PdoGsb::$monPdo;
-    $sql = "UPDATE medecin SET nom=?, prenom=?, motDePasse=? WHERE id=?";
-    $stmt= $pdo->prepare($sql);
-    $stmt->execute([$nom, $prenom, $password, $id]);
+
+    //permet de modifier les infos sans re-hash un nouveau mot de passe
+    if(strlen($password) == 0){
+        $sql = "UPDATE medecin SET nom=?, prenom=? WHERE id=?";
+        $stmt= $pdo->prepare($sql);
+        $stmt->execute([$nom, $prenom, $id]);
+        echo '2';
+    } else { //Dans ce cas le mot de passe est demandé modifié via $password, on le modifie
+        $sql = "UPDATE medecin SET nom=?, prenom=?, motDePasse=? WHERE id=?";
+        $stmt= $pdo->prepare($sql);
+        $stmt->execute([$nom, $prenom, $password, $id]);
+        echo '3';
+    }
+
 
 
 

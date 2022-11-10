@@ -26,7 +26,7 @@ switch($uc){
 	case 'connexion':{
 		include("controleurs/c_connexion.php");break;
 	}
-        case 'creation':{
+	case 'creation':{
 		include("controleurs/c_creation.php");break;
 	}
 	case 'modification':{
