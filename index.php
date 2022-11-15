@@ -26,11 +26,14 @@ switch($uc){
 	case 'connexion':{
 		include("controleurs/c_connexion.php");break;
 	}
+	case 'validationMedecin':{
+		include("controleurs/c_validationMedecin.php");break;
+	}
 	case 'creation':{
 		include("controleurs/c_creation.php");break;
 	}
 	case 'modification':{
-		include("controleurs/c_mofication.php");break;
+		include("controleurs/c_modifications.php");break;
 	}
 
 	case 'notfound':{

@@ -29,7 +29,7 @@
 				<div class="box">
 					<div class="content-wrap">
 						<legend>Se connecter</legend>
-							<form method="post" action="index.php?uc=connexion&action=verifMail">
+							<form method="post" action="index.php?uc=connexion&action=verifications">
 								<input name="login" class="form-control" type="text" placeholder="Login">
 								<input name="mdp" class="form-control" type="password" placeholder="Password">
 								</br>

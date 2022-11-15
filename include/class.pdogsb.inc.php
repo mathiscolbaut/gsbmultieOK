@@ -129,6 +129,12 @@ public function envoieOtp($mail){
     return $execution;
 }
 
+
+    /**
+     * ZONE TOKEN VALIDATION EMAIL
+     * @author chloé
+     */
+
 public function envoieToken($mail){
 
     $codeRandom = $this->generateRandomString(20);
@@ -198,6 +204,114 @@ function verifToken($mail, $token) {
     }
     return false;
 }
+
+    /**
+     * FIN ZONE EMAIL
+     *
+     */
+
+    /**
+     * ZONE VALIDATEUR
+     */
+public function verifierMedecinAupresValidateur($mailMedecin) {
+
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT mail FROM medecin WHERE idRole=3");
+
+    if ($monObjPdoStatement->execute()) {
+
+
+        //Envoyer à tout les validateurs
+        foreach ($monObjPdoStatement->fetch() as $validateur) {
+            $this->envoieValidation($mailMedecin, $validateur);
+        }
+
+    }
+    else
+        throw new Exception("erreur");
+}
+
+public function envoieValidation($mailMedecin, $mailValidateur){
+
+        //Evite les doubles envoies
+        if($this->verifierSiMedecinValiderTokenExistant($mailMedecin)) {
+
+            $codeRandom = $this->generateRandomString(20);
+            $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE medecin set tokenValidationMedecin = :code WHERE mail = :mail ");
+            $bv1 = $pdoStatement->bindValue(':code', $codeRandom);
+
+            $bv2 = $pdoStatement->bindValue(':mail', $mailMedecin);
+            $execution = $pdoStatement->execute();
+
+            $to = $mailMedecin;
+            $subject = 'GSB Validateur - Demande de validation';
+            $message = 'Bonjour veuillez confirmer votre compte ici : http://localhost:8888/Quesque/GSBMulti/index.php?uc=validationMedecin&action=validationMedecin&mail=' . $mailMedecin . '&token=' . $codeRandom . "\n\nVous pouvez aussi confirmer votre compte via le code: " . $codeRandom;
+            $headers = 'From: verifValidateur@gsb.fr' . "\r\n" .
+                'Reply-To: verifValidateur@gsb.fr' . "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
+
+            //Mail crypté
+            mb_send_mail($to, $subject, $message, $headers);
+            return $execution;
+        } else{
+            return false;
+        }
+ }
+
+
+public function verifierSiMedecinValider($mail) {
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT valide, idRole FROM medecin WHERE mail = :leMail");
+    $bv1 = $pdoStatement->bindValue(':leMail', $mail);
+    $execution = $pdoStatement->execute();
+    $resultatRequete = $pdoStatement->fetch();
+
+    //Les utilisateurs non médecin ne doivent pas le confirmer
+    if($resultatRequete['idRole']!=1) {
+        return true;
+    }
+
+    return $resultatRequete['valide'] == 1;
+}
+
+private function verifierSiMedecinValiderTokenExistant($mail) {
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT tokenValidationMedecin FROM medecin WHERE mail = :leMail");
+    $bv1 = $pdoStatement->bindValue(':leMail', $mail);
+    $execution = $pdoStatement->execute();
+    $resultatRequete = $pdoStatement->fetch();
+
+    return $resultatRequete['tokenValidationMedecin'] == null;
+}
+
+public function verifierTokenMedecinValider($mail, $token) {
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT tokenValidationMedecin FROM medecin WHERE mail = :leMail");
+    $bv1 = $pdoStatement->bindValue(':leMail', $mail);
+    $execution = $pdoStatement->execute();
+    $resultatRequete = $pdoStatement->fetch();
+
+    if(!$execution) {
+        echo "Erreur dans la requête";
+        return false;
+    }
+    if($resultatRequete['tokenValidationMedecin'] == null) {
+        echo 'Le médecin à déjà validé';
+        return false;
+    }
+
+    if($resultatRequete['tokenValidationMedecin']==$token) {
+        $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE medecin set tokenValidationMedecin = NULL,  valide = 1 WHERE mail = :mail ");
+        $bv2 = $pdoStatement->bindValue(':mail', $mail);
+        $execution = $pdoStatement->execute();
+        return true;
+    } else {
+        echo 'Erreur, le token de validation indiqué est incorrect';
+    }
+
+
+    return false;
+}
+
+
+
 
 function generateRandomString($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

@@ -1,6 +1,8 @@
 <?php
-if (!$_SESSION['id'])
-    header('Location: ../index.php');
+if (!$_SESSION['id']) {
+    echo "Pas connecter";
+    //header('Location: ../index.php');
+}
 else {
 ?>
 <!DOCTYPE html>
