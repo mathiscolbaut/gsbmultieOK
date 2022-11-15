@@ -97,13 +97,36 @@
         ?>
         <li class=""><a href="index.php?uc=modification&action=changeinformation">Modifier vos informations</a></li>
 
+          <?php
+          $roleNom = "Aucun";
+
+          switch ($_SESSION['idRole']) {
+              case 1:
+                  $roleNom = "Médecin";
+                  break;
+              case 2:
+                  $roleNom = "Modérateur";
+                  break;
+              case 3:
+                  $roleNom = "Validateur";
+                  break;
+              case 4:
+                  $roleNom = "Chef de projet";
+
+                  break;
+              case 5:
+                  $roleNom = "Administrateur";
+                  break;
+          }
+
+          ?>
 
       </ul>
       <ul class="nav navbar-nav navbar-right">
           <a style="margin-top: 3%" class="btn btn-danger" href="index.php?uc=connexion&action=deco" role="button">Logout</a>
 
 		  <li><a><?php echo $_SESSION['prenom']."  ".$_SESSION['nom']?></a></li>
-		  <li><a>Médecin</a></li>
+		  <li><a><?php echo $roleNom; ?></a></li>
        
      </ul>
     </div><!-- /.navbar-collapse -->

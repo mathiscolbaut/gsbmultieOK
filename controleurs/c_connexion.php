@@ -8,10 +8,19 @@ $action = $_GET['action'];
 switch($action){
 	
 	case 'demandeConnexion':{
+        if($pdo->enMaintenance()) {
+            include "vues/v_maintenance.php";
+            return;
+        }
 		include("vues/v_connexion.php");
 
 		break;
 	}
+    case 'demandeConnexionAdmin':{
+        include("vues/v_connexion.php");
+
+        break;
+    }
 
     case 'verifications':{
         $login = $_POST['login'];
@@ -19,10 +28,18 @@ switch($action){
 
         /**
          * 1/ Verfier MDP/Login
-         * 2/ D'abord verifier l'email
-         * 3/ Et ensuite que le médecin a bien été validé
+         * 2/ Verifier le grade si administateur
+         * 3/ D'abord verifier l'email
+         * 4/ Et ensuite que le médecin a bien été validé
          */
 
+
+        if($pdo->enMaintenance()) {
+            if($pdo->donneLeMedecinByMail($login)[4]!=5) {
+                echo "Le site est en maintenance, seul les administateurs sont autorisés à se connecter.";
+                return;
+            }
+        }
 
         if(!$pdo->checkUser($login,$mdp)) {
             echo "Mot de passe ou password incorrects.";

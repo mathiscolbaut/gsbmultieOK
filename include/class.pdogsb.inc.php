@@ -244,8 +244,8 @@ public function envoieValidation($mailMedecin, $mailValidateur){
             $execution = $pdoStatement->execute();
 
             $to = $mailMedecin;
-            $subject = 'GSB Validateur - Demande de validation';
-            $message = 'Bonjour veuillez confirmer votre compte ici : http://localhost:8888/Quesque/GSBMulti/index.php?uc=validationMedecin&action=validationMedecin&mail=' . $mailMedecin . '&token=' . $codeRandom . "\n\nVous pouvez aussi confirmer votre compte via le code: " . $codeRandom;
+            $subject = 'GSB Validateur - Demande de validation Dr '.$this->donneLeMedecinByMail($mailMedecin)[1].' '.$this->donneLeMedecinByMail($mailMedecin)[2];
+            $message = 'Bonjour veuillez confirmer le compte du Dr '.$this->donneLeMedecinByMail($mailMedecin)[1].' '.$this->donneLeMedecinByMail($mailMedecin)[2].' ici : http://localhost:8888/Quesque/GSBMulti/index.php?uc=validationMedecin&action=validationMedecin&mail=' . $mailMedecin . '&token=' . $codeRandom . "\n\nVous pouvez aussi confirmer votre compte via le code: " . $codeRandom;
             $headers = 'From: verifValidateur@gsb.fr' . "\r\n" .
                 'Reply-To: verifValidateur@gsb.fr' . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
@@ -301,6 +301,17 @@ public function verifierTokenMedecinValider($mail, $token) {
         $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE medecin set tokenValidationMedecin = NULL,  valide = 1 WHERE mail = :mail ");
         $bv2 = $pdoStatement->bindValue(':mail', $mail);
         $execution = $pdoStatement->execute();
+
+
+        //Envoie email au médecin pour le prévenir qu'il est validé
+        $to = $mail;
+        $subject = 'GSB Validateur - Dr '.$this->donneLeMedecinByMail($to)[1].' '.$this->donneLeMedecinByMail($to)[2].' vous êtes validé(e)!';
+        $message = 'Bonjour Dr '.$this->donneLeMedecinByMail($to)[1].' '.$this->donneLeMedecinByMail($to)[2].' Vous avez été validé par noss Validateurs, félicitations et bienvenue sur GSB !';
+        $headers = 'From: verifValidateur@gsb.fr' . "\r\n" .
+            'Reply-To: verifValidateur@gsb.fr' . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
+        mail($to, $subject, $message, $headers);
+
         return true;
     } else {
         echo 'Erreur, le token de validation indiqué est incorrect';
@@ -310,7 +321,18 @@ public function verifierTokenMedecinValider($mail, $token) {
     return false;
 }
 
+    /**
+     * MAINTENANCE
+     *
+     */
 
+public function enMaintenance() {
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT valeur FROM etatSite WHERE infoSite = 'maintenance'");
+    $execution = $pdoStatement->execute();
+    $resultatRequete = $pdoStatement->fetch();
+
+    return $resultatRequete['valeur'] == 1;
+}
 
 
 function generateRandomString($length = 10) {
