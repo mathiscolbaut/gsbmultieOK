@@ -15,8 +15,8 @@ switch($action){
 
 
             if ($pdo->verifierTokenMedecinValider($mail, $token)) {
-                echo "Le compte " . $mail . " a été validé avec succès !";
-                include "vues/v_gohome.php";
+                echo "<h1 style='color: green'>Le compte ". $mail." a été validé avec succès !</h1>";
+                include("vues/v_connexion.php");
             }
         } else {
             echo "Vous n'êtes pas autoriser à effectuer cette action.";
