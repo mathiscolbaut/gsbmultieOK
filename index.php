@@ -35,6 +35,9 @@ switch($uc){
 	case 'modification':{
 		include("controleurs/c_modifications.php");break;
 	}
+	case 'admin':{
+		include("controleurs/c_admin.php");break;
+	}
 
 	case 'notfound':{
 		include("controleurs/c_notfound.php");break;

@@ -172,11 +172,11 @@ function verifToken($mail, $token) {
     $resultatRequete = $pdoStatement->fetch();
 
     if(!$execution) {
-        echo "Erreur dans la requête";
+        echo "<h1 style='color: red'>Erreur dans la requête</h1>";
         return false;
     }
     if($resultatRequete['token'] == null) {
-        echo 'Votre compte à déjà verifié';
+        echo "<h1 style='color: red'>Votre compte à déjà verifié</h1>";
         return false;
     }
 
@@ -191,7 +191,8 @@ function verifToken($mail, $token) {
     if(($d1-$d2) >(3600*24))
     {
         $this->envoieToken($mail);
-        echo 'Code trop vieux, vous allez recevoir un nouveau code';
+        echo "<h1 style='color: red'>Code trop vieux, vous allez recevoir un nouveau code'</h1>";
+
     } else {
         if($resultatRequete['token']==$token) {
             $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE medecin set token = NULL WHERE mail = :mail ");
@@ -199,7 +200,7 @@ function verifToken($mail, $token) {
             $execution = $pdoStatement->execute();
             return true;
         } else {
-            echo 'Erreur, le token indiqué est incorrect';
+            echo "<h1 style='color: red'>Erreur le token est incorrect</h1>";
         }
     }
     return false;
@@ -289,11 +290,11 @@ public function verifierTokenMedecinValider($mail, $token) {
     $resultatRequete = $pdoStatement->fetch();
 
     if(!$execution) {
-        echo "Erreur dans la requête";
+        echo "<h1 style='color: red'>Erreur dans la requête</h1>";
         return false;
     }
     if($resultatRequete['tokenValidationMedecin'] == null) {
-        echo 'Le médecin à déjà validé';
+        echo "<h1 style='color: red'>Le médecin a déjà été validé</h1>";
         return false;
     }
 
@@ -311,6 +312,7 @@ public function verifierTokenMedecinValider($mail, $token) {
             'Reply-To: verifValidateur@gsb.fr' . "\r\n" .
             'X-Mailer: PHP/' . phpversion();
         mail($to, $subject, $message, $headers);
+        echo "<h1 style='color: lawngreen'>Le médecin a été validé</h1>";
 
         return true;
     } else {
@@ -333,7 +335,20 @@ public function enMaintenance() {
 
     return $resultatRequete['valeur'] == 1;
 }
+public function miseenMaintenance($bool) {
+    $enMaintenance = boolval($bool=="on") ? "1" : "0";
 
+        $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE etatSite SET valeur = ".$enMaintenance." WHERE infoSite = 'maintenance'");
+        $execution = $pdoStatement->execute();
+
+        if($enMaintenance=="1") {
+            echo "<h1 style='color: lawngreen'>Le site est en maintenance !</h1>";
+        } else if($enMaintenance=="0") {
+            echo "<h1 style='color: lawngreen'>Le site n'est plus en maintenance !</h1>";
+        }
+
+        return $execution;
+}
 
 function generateRandomString($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

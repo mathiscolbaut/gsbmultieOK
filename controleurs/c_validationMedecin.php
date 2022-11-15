@@ -2,7 +2,7 @@
 
 
 if(!isset($_GET['action'])){
-	$_GET['action'] = 'demandeConnexion';
+	$_GET['action'] = 'validationMedecin';
 }
 $action = $_GET['action'];
 switch($action){
@@ -24,12 +24,6 @@ switch($action){
     break;
     }
 
-    case 'accueil':{
-        include "vues/v_sommaire.php";
-
-        break;
-
-    }
 
 
        
