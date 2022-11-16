@@ -464,13 +464,106 @@ function deleteToutesInscriptionVisio($idVisio) {
 
     //UPDATE `medecinvisio` SET `avis` = 'j\'ai adoré léna car elle est trop belle' WHERE `medecinvisio`.`idMedecin` = 13 AND `medecinvisio`.`idVisio` = 8;
 
-function ajoutAvis($idVisio, $nomVisio, $objectif, $url, $dateVisio){
+function ajoutAvis($idVisio, $idUser, $avis){
 
     $pdo = PdoGsb::$monPdo;
+    $codeRandom = $this->generateRandomString(20);
 
-    $sql = "UPDATE visioconference SET nomVisio=?, objectif=?, url=?, dateVisio=? WHERE id=?";
+    $sql = "UPDATE `medecinvisio` SET `avis`=?, `tokenAvis`=? WHERE `medecinvisio`.`idMedecin`=? AND `medecinvisio`.`idVisio`=?;";
+    echo "UPDATE `medecinvisio` SET `avis`=".$avis.", SET `tokenAvis`=".$codeRandom." WHERE `medecinvisio`.`idMedecin`=".$idUser." AND `medecinvisio`.`idVisio`=".$idVisio.";";
     $stmt= $pdo->prepare($sql);
-    return$stmt->execute([$nomVisio, $objectif, $url,$dateVisio, $idVisio]);
+    return$stmt->execute([$avis,$codeRandom, $idUser, $idVisio]);
+}
+
+function aDejaPosteAvis($idVisio, $userId) {
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT avis,tokenAvis FROM `medecinvisio` WHERE idVisio= :lId AND idMedecin= :lUser");
+    $bvc1=$monObjPdoStatement->bindValue(':lId',$idVisio,PDO::PARAM_INT);
+    $bvc1=$monObjPdoStatement->bindValue(':lUser',$userId,PDO::PARAM_INT);
+
+    if ($monObjPdoStatement->execute()) {
+        return $monObjPdoStatement->fetch();
+
+    }
+    else
+        throw new Exception("erreur");
+}
+
+public function approuverAvisMedecin($idVisio, $idMedecin, $token) {
+    $pdoStatement = PdoGsb::$monPdo->prepare("SELECT tokenAvis FROM medecinvisio WHERE idMedecin = :idMedecin and idVisio = :idVisio");
+    $bv1 = $pdoStatement->bindValue(':idMedecin', $idMedecin );
+    $bv1 = $pdoStatement->bindValue(':idVisio', $idVisio);
+    $execution = $pdoStatement->execute();
+    $resultatRequete = $pdoStatement->fetch();
+
+    if(!$execution) {
+        echo "<h1 style='color: red'>Erreur dans la requête</h1>";
+        return false;
+    }
+    if($resultatRequete['tokenAvis'] == null) {
+        echo "<h1 style='color: red'>L'avis a déjà été validé</h1>";
+        return false;
+    }
+
+    if($resultatRequete['tokenAvis']==$token) {
+        $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE medecinvisio set tokenAvis = NULL WHERE idMedecin = :idMedecin and idVisio = :idVisio");
+        $bv2 = $pdoStatement->bindValue(':idMedecin', $idMedecin);
+        $bv2 = $pdoStatement->bindValue(':idVisio', $idVisio);
+        $execution = $pdoStatement->execute();
+
+        return true;
+    } else {
+        echo 'Erreur, le token de validation indiqué est incorrect';
+    }
+
+
+    return false;
+}
+
+function recupererAvisIds($visioId) {
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT idMedecin FROM `medecinvisio` WHERE idVisio=? AND tokenAvis IS NULL");
+
+    if ($monObjPdoStatement->execute([$visioId])) {
+        return $monObjPdoStatement->fetchAll();
+    }
+    else
+        throw new Exception("erreur");
+}
+
+function recupererAvisInfo($idVisio, $userId) {
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT idMedecin, avis FROM `medecinvisio` WHERE idVisio= :lId AND idMedecin= :lUser AND tokenAvis IS NULL");
+    $bvc1=$monObjPdoStatement->bindValue(':lId',$idVisio,PDO::PARAM_INT);
+    $bvc1=$monObjPdoStatement->bindValue(':lUser',$userId,PDO::PARAM_INT);
+
+    if ($monObjPdoStatement->execute()) {
+        return $monObjPdoStatement->fetch();
+
+    }
+    else
+        throw new Exception("erreur");
+}
+
+function recupererAvisModeration() {
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT idVisio, idMedecin, avis,tokenAvis FROM `medecinvisio` WHERE tokenAvis IS NOT NULL ");
+
+    if ($monObjPdoStatement->execute()) {
+        return $monObjPdoStatement->fetchAll();
+
+    }
+    else
+        throw new Exception("erreur");
+}
+
+function deleteAvis($idVisio, $idMedecin) {
+    $pdoStatement = PdoGsb::$monPdo->prepare("DELETE FROM `medecinvisio` WHERE `medecinvisio`.`idVisio` = :leIdVisio AND idMedecin= :leIdMedecin");
+    $bv1 = $pdoStatement->bindValue(':leIdVisio', $idVisio);
+    $bv1 = $pdoStatement->bindValue(':leIdMedecin', $idMedecin);
+
+    $execution = $pdoStatement->execute();
+    return $execution;
 }
 
 function generateRandomString($length = 10) {

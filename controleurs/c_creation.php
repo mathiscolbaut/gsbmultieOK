@@ -17,7 +17,7 @@ switch($action){
 
         if($pdo->verifToken($mail, $token)) {
             echo "Compte verifier!";
-            echo "<h1 style='color: green'>Le compte " . $mail . " a été validé avec succès !"</h1>";";
+            echo "<h1 style='color: green'>Le compte " . $mail . " a été validé avec succès !</h1>";
         }
         break;
     }

@@ -13,7 +13,6 @@
         Visioconférences
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#">Voir liste des visios</a>
-        <a class="dropdown-item" href="#">Gérer les visioconférences</a>
+        <a class="dropdown-item" href="index.php?uc=visioconferences&action=liste">Liste des visioconférences</a>
     </div>
 </li>
