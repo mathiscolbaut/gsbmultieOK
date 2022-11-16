@@ -4,5 +4,6 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="index.php?uc=admin&action=maintenance">Maintenance du site</a>
+        <a class="dropdown-item" href="index.php?uc=admin&action=maintenance">Visioconférences</a>
     </div>
 </li>

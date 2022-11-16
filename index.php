@@ -32,6 +32,9 @@ switch($uc){
 	case 'creation':{
 		include("controleurs/c_creation.php");break;
 	}
+	case 'visioconferences':{
+		include("controleurs/c_visio.php");break;
+	}
 	case 'modification':{
 		include("controleurs/c_modifications.php");break;
 	}

@@ -350,6 +350,129 @@ public function miseenMaintenance($bool) {
         return $execution;
 }
 
+
+/**
+ * VISIOCONFERENCES
+ */
+
+function creerVisio($nomVisio, $objectif, $url, $dateVisio) {
+    $pdoStatement = PdoGsb::$monPdo->prepare("INSERT INTO visioconference(id,nomVisio,objectif,url, dateVisio) "
+        . "VALUES (null, :leNomVisio, :leObjectif, :leURL, :laDateVisio)");
+    $bv1 = $pdoStatement->bindValue(':leNomVisio', $nomVisio);
+    $bv2 = $pdoStatement->bindValue(':leObjectif', $objectif);
+    $bv3 = $pdoStatement->bindValue(':leURL', $url);
+    $bv4 = $pdoStatement->bindValue(':laDateVisio', $dateVisio);
+
+    $execution = $pdoStatement->execute();
+    return $execution;
+}
+
+function modifierVisio($idVisio, $nomVisio, $objectif, $url, $dateVisio){
+
+    $pdo = PdoGsb::$monPdo;
+
+    $sql = "UPDATE visioconference SET nomVisio=?, objectif=?, url=?, dateVisio=? WHERE id=?";
+    $stmt= $pdo->prepare($sql);
+    return$stmt->execute([$nomVisio, $objectif, $url,$dateVisio, $idVisio]);
+}
+
+function supprimerVisio($idVisio) {
+    $this->deleteToutesInscriptionVisio($idVisio);
+    $pdoStatement = PdoGsb::$monPdo->prepare("DELETE FROM `visioconference` WHERE `id` = :leIdVisio");
+    $bv1 = $pdoStatement->bindValue(':leIdVisio', $idVisio);
+
+
+    $execution = $pdoStatement->execute();
+    return $execution;
+}
+
+
+function recupererVisioIds() {
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT id FROM `visioconference`");
+
+    if ($monObjPdoStatement->execute()) {
+        return $monObjPdoStatement->fetchAll();
+    }
+    else
+        throw new Exception("erreur");
+}
+
+function recupererVisioInfo($idVisio) {
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT * FROM `visioconference` WHERE id= :lId");
+    $bvc1=$monObjPdoStatement->bindValue(':lId',$idVisio,PDO::PARAM_INT);
+
+    if ($monObjPdoStatement->execute()) {
+        return $monObjPdoStatement->fetch();
+
+    }
+    else
+        throw new Exception("erreur");
+}
+
+
+function inscriptionVisio($idVisio, $idUser) {
+    $pdoStatement = PdoGsb::$monPdo->prepare("INSERT INTO medecinvisio(idMedecin,idVisio,dateInscription) "
+        . "VALUES (:leIdUser, :leIdVisio, now())");
+    $bv1 = $pdoStatement->bindValue(':leIdVisio', $idVisio);
+    $bv2 = $pdoStatement->bindValue(':leIdUser', $idUser);
+
+    $execution = $pdoStatement->execute();
+    return $execution;
+}
+
+function estInscriVisio($idVisio, $idUser) {
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT idVisio FROM `medecinvisio` WHERE idMedecin= :lId AND idVisio= :lVisioId");
+    $bvc1=$monObjPdoStatement->bindValue(':lId',$idUser,PDO::PARAM_INT);
+    $bvc1=$monObjPdoStatement->bindValue(':lVisioId',$idVisio,PDO::PARAM_INT);
+
+    if ($monObjPdoStatement->execute()) {
+        return $monObjPdoStatement->fetch();
+
+    }
+    else
+        throw new Exception("erreur");
+}
+
+
+
+function deleteInscriptionVisio($idVisio, $idUser) {
+    $pdoStatement = PdoGsb::$monPdo->prepare("DELETE FROM `medecinvisio` WHERE `medecinvisio`.`idMedecin` = :leIdUser AND `medecinvisio`.`idVisio` = :leIdVisio");
+        //DELETE FROM `medecinvisio` WHERE `medecinvisio`.`idMedecin` = 13 AND `medecinvisio`.`idVisio` = 3
+    echo 'DELETE FROM `medecinvisio` WHERE `medecinvisio`.`idMedecin` = '.$idUser.' AND `medecinvisio`.`idVisio` = '.$idVisio;
+    $bv1 = $pdoStatement->bindValue(':leIdVisio', $idVisio);
+    $bv2 = $pdoStatement->bindValue(':leIdUser', $idUser);
+
+    $execution = $pdoStatement->execute();
+    return $execution;
+}
+
+function deleteToutesInscriptionVisio($idVisio) {
+    $pdoStatement = PdoGsb::$monPdo->prepare("DELETE FROM `medecinvisio` WHERE `medecinvisio`.`idVisio` = :leIdVisio");
+    $bv1 = $pdoStatement->bindValue(':leIdVisio', $idVisio);
+
+    $execution = $pdoStatement->execute();
+    return $execution;
+}
+
+
+    /**
+     * AVIS
+     */
+
+    //UPDATE `medecinvisio` SET `avis` = 'j\'ai adoré léna car elle est trop belle' WHERE `medecinvisio`.`idMedecin` = 13 AND `medecinvisio`.`idVisio` = 8;
+
+function ajoutAvis($idVisio, $nomVisio, $objectif, $url, $dateVisio){
+
+    $pdo = PdoGsb::$monPdo;
+
+    $sql = "UPDATE visioconference SET nomVisio=?, objectif=?, url=?, dateVisio=? WHERE id=?";
+    $stmt= $pdo->prepare($sql);
+    return$stmt->execute([$nomVisio, $objectif, $url,$dateVisio, $idVisio]);
+}
+
 function generateRandomString($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);

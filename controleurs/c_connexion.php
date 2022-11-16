@@ -36,13 +36,13 @@ switch($action){
 
         if($pdo->enMaintenance()) {
             if($pdo->donneLeMedecinByMail($login)[4]!=5) {
-                echo "Le site est en maintenance, seul les administateurs sont autorisés à se connecter.";
+                echo "<h1 style='color: red'>Le site est en maintenance, seul les administateurs sont autorisés à se connecter.</h1>";
                 return;
             }
         }
 
         if(!$pdo->checkUser($login,$mdp)) {
-            echo "Mot de passe ou password incorrects.";
+            echo "<h1 style='color: red'>Email ou password incorrects.</h1>";
             ajouterErreur("Login ou mot de passe incorrect");
             include("vues/v_connexion.php");
             return;
@@ -50,16 +50,16 @@ switch($action){
 
 
         if(!$pdo->verifierSiValider($login)) {
-            echo "Veuillez valider votre compte avant de pouvoir accéder au site.";
-            echo "Nous vous avons envoyer un nouveau code (disponible 24 heures).";
+            echo "<h1 style='color: red'>Veuillez valider votre compte avant de pouvoir accéder au site.</h1>";
+            echo "<h1 style='color: red'>Nous vous avons envoyer un nouveau code (disponible 24 heures).</h1>";
             $pdo->envoieToken($login);
             return;
         }
 
 
         if(!$pdo->verifierSiMedecinValider($login)) {
-            echo "Votre compte n'a pas été encore validé par un Validateur.";
-            echo "Merci de patienter 24 heures.";
+            echo "<h1 style='color: red'>Votre compte n'a pas été encore validé par un Validateur.</h1>";
+            echo "<h1 style='color: red'>Merci de patienter 24 heures.</h1>";
 
             $pdo->verifierMedecinAupresValidateur($login);
             return;
@@ -77,6 +77,7 @@ switch($action){
 
         break;
     }
+
 
 	case 'valideConnexion':{
 
