@@ -10,9 +10,7 @@ include "vues/v_sommaire.php";
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="js/custom.js"></script>
     <title>GSB - Création Admin</title>
@@ -22,13 +20,6 @@ include "vues/v_sommaire.php";
     <link href="assets/profilcss/profil.css" rel="stylesheet">
     <!-- styles -->
     <link href="css/styles.css" rel="stylesheet">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
 </head>
 <body background="assets/img/laboratoire.jpg">
 
@@ -38,6 +29,33 @@ include "vues/v_sommaire.php";
 
 <div class="page-content">
     <div class="row">
+        <div class="page-content container">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <div class="login-wrapper">
+                        <div class="box">	
+                            <div class="content-wrap">
+                                <legend>Formulaire de création d'administrateur</legend>
+                                <form method="post" action="index.php?uc=creation&action=valideCreationAdmin">
+                                    <input name="loginAdmin" class="form-control" type="email" placeholder="Mail"/>
+                                    <input name="mdpAdmin" class="form-control" type="password" placeholder="Mot de passe"/>
+                                    <input name="prenomAdmin" class="form-control" type="text" placeholder="Prénom"/>
+                                    <input name="nomAdmin" class="form-control" type="text" placeholder="Nom"/>
+                                    <select class="form-control" name="idRole">
+                                        <option value=5>Administrateur</option>
+                                    </select>                                                
+                                    <br>
+                                    <input type="submit" class="btn btn-primary signup" value="Créer"/>
+                                </form>
+                                </br>						
+                            </div>	
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
         <?php include('v_footer.php'); ?>
 
