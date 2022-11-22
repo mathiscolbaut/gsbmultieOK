@@ -43,7 +43,7 @@
                   <br>
                   <input type="checkbox" class="form-control" required="required" style="height: 30px;width: 30px;margin-left: 45%;">
                   <p>J'atteste avoir lu et accepte notre</p>
-                  <a href="http://localhost/gsb/vues/v_politiqueprotectiondonnees.php" target="_blank" >politique de protection des données</a>
+                  <a href="vues/v_politiqueprotectiondonnees.php" target="_blank" >politique de protection des données</a>
                   <br>
                   <input type="submit" class="btn btn-primary signup" value="Créer"/>
                 </form>

@@ -70,7 +70,8 @@ Useful links
   <!-- Copyright -->
   <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
     © 2021 Copyright:
-    <a class="text-reset fw-bold" href="http://localhost/gsb">GSB</a>
+
+    <a class="text-reset fw-bold" href="<?php     echo "http://".$_SERVER['SERVER_ADDR'].":".$_SERVER['SERVER_PORT']."/".$_SERVER['PHP_SELF']; ?>">GSB</a>
   </div>
   <!-- Copyright -->
 </footer>

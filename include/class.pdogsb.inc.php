@@ -13,8 +13,7 @@ class PdoGsb{
  * pour toutes les mÃ©thodes de la classe
  */				
 	private function __construct(){
-          
-    	PdoGsb::$monPdo = new PDO(PdoGsb::$serveur.';'.PdoGsb::$bdd, PdoGsb::$user, PdoGsb::$mdp); 
+        PdoGsb::$monPdo = new PDO(PdoGsb::$serveur.';'.PdoGsb::$bdd, PdoGsb::$user, PdoGsb::$mdp);
 		PdoGsb::$monPdo->query("SET CHARACTER SET utf8");
 	}
 	public function _destruct(){
@@ -30,7 +29,7 @@ class PdoGsb{
 	public  static function getPdoGsb(){
 		if(PdoGsb::$monPdoGsb==null){
 			PdoGsb::$monPdoGsb= new PdoGsb();
-		}
+        }
 		return PdoGsb::$monPdoGsb;  
 	}
 /**
@@ -146,7 +145,11 @@ public function envoieToken($mail){
 
     $to = $mail;
     $subject = 'GSB - Confirmer votre compte';
-    $message = 'Bonjour veuillez confirmer votre compte ici : http://localhost:8888/Quesque/GSBMulti/index.php?uc=creation&action=valideToken&mail='.$mail.'&token=' . $codeRandom."\n\nVous pouvez aussi confirmer votre compte via le code: ".$codeRandom;
+
+
+    $urlServer = "http://".$_SERVER['SERVER_ADDR'].":".$_SERVER['SERVER_PORT']."/".$_SERVER['PHP_SELF'];
+
+    $message = 'Bonjour veuillez confirmer votre compte ici : '.$urlServer.'?uc=creation&action=valideToken&mail='.$mail.'&token=' . $codeRandom."\n\nVous pouvez aussi confirmer votre compte via le code: ".$codeRandom;
     $headers = 'From: verif@gsb.fr' . "\r\n" .
         'Reply-To: verif@gsb.fr' . "\r\n" .
         'X-Mailer: PHP/' . phpversion();
@@ -246,7 +249,9 @@ public function envoieValidation($mailMedecin, $mailValidateur){
 
             $to = $mailMedecin;
             $subject = 'GSB Validateur - Demande de validation Dr '.$this->donneLeMedecinByMail($mailMedecin)[1].' '.$this->donneLeMedecinByMail($mailMedecin)[2];
-            $message = 'Bonjour veuillez confirmer le compte du Dr '.$this->donneLeMedecinByMail($mailMedecin)[1].' '.$this->donneLeMedecinByMail($mailMedecin)[2].' ici : http://localhost:8888/Quesque/GSBMulti/index.php?uc=validationMedecin&action=validationMedecin&mail=' . $mailMedecin . '&token=' . $codeRandom . "\n\nVous pouvez aussi confirmer votre compte via le code: " . $codeRandom;
+            $urlServer = "http://".$_SERVER['SERVER_ADDR'].":".$_SERVER['SERVER_PORT']."/".$_SERVER['PHP_SELF'];
+
+            $message = 'Bonjour veuillez confirmer le compte du Dr '.$this->donneLeMedecinByMail($mailMedecin)[1].' '.$this->donneLeMedecinByMail($mailMedecin)[2].' ici : '.$urlServer.'?uc=validationMedecin&action=validationMedecin&mail=' . $mailMedecin . '&token=' . $codeRandom . "\n\nVous pouvez aussi confirmer votre compte via le code: " . $codeRandom;
             $headers = 'From: verifValidateur@gsb.fr' . "\r\n" .
                 'Reply-To: verifValidateur@gsb.fr' . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
