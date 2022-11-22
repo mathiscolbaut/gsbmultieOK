@@ -3,7 +3,7 @@ if (!$_SESSION['id'])
 header('Location: ../index.php');
 else {
 ?>
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -21,23 +21,25 @@ else {
 </head>
 <body background="assets/img/laboratoire.jpg">
 
+
+
 <?php include('v_navbar.php');?>
 
         <div class="container-fluid">
         <form style="background: white;width: 30%;text-align: center;margin-left: 35%;border-radius: 10px;"  method="post"
-        action="index.php?uc=produit&action=modifier" enctype="multipart/form-data">
-    
-            <label for="nom" class="form-control">Nom du produit :</label>
-            <input type="text" name="nom" id="nom" class="form-control"/>
+        action="index.php?uc=produit&action=modification&id=<?php echo $identifiant?>"  enctype="multipart/form-data">
+
+            <label for="nom" class="form-control">Nom du produit : <?php echo $pdo->voirProduitById($identifiant)[1];  ?></label>
+            <input type="text" name="nom" id="nom" class="form-control" value="<?php echo $pdo->voirProduitById($identifiant)[1];  ?>"/>
         
             <label for="objectif" class="form-control">Objectif visé :</label>
-            <input type="text" name="objectif" id="objectif" class="form-control"/>
+            <input type="text" name="objectif" id="objectif" class="form-control" value="<?php echo $pdo->voirProduitById($identifiant)[2];  ?>"/>
 
             <label for="infos" class="form-control">Informations relatives au produit :</label>
-            <input type="text" name="infos" id="infos" class="form-control"/>
+            <input type="text" name="infos" id="infos" class="form-control" value="<?php echo $pdo->voirProduitById($identifiant)[3];  ?>"/>
 
             <label for="effetIndesirable" class="form-control">Effets indésirables :</label>
-            <input type="text" name="effetIndesirable" id="effetIndesirable" class="form-control"/>
+            <input type="text" name="effetIndesirable" id="effetIndesirable" class="form-control" value="<?php echo $pdo->voirProduitById($identifiant)[4];  ?>"/>
 
             <button type="submit" name="button" class="btn btn-primary">Modifier le produit</button>
 
@@ -46,7 +48,22 @@ else {
 
 <div class="page-content">
     <div class="row">
-
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
         <?php include('v_footer.php'); ?>
 
         <?php };?>

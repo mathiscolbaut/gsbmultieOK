@@ -708,6 +708,56 @@ function changeinfosmedecin($id,$nom,$prenom,$password){
 
 }
 
+    /**
+     * ADD OPERATIONS
+     */
+
+function creeOperation($idProduit, $idUser, $ip, $action)
+{
+    $pdoStatement = PdoGsb::$monPdo->prepare("INSERT INTO operations(idOperation,idProduit,idUser,ip,actionDesc)" . "
+VALUES (null, :leIdOpe, :leIdUser, :lIP, :lAction)");
+    $bv1 = $pdoStatement->bindValue(':leIdOpe', $idProduit);
+    $bv2 = $pdoStatement->bindValue(':leIdUser', $idUser);
+    $bv3 = $pdoStatement->bindValue(':lIP', $ip);
+    $bv4 = $pdoStatement->bindValue(':lAction', $action);
+
+    $execution = $pdoStatement->execute();
+    return $execution;
+}
+
+function voirOperations(){
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT * FROM operations");
+    if ($monObjPdoStatement->execute()) {
+        return $monObjPdoStatement->fetchAll();
+    }
+    else{
+        throw new Exception("Erreur dans la requête");
+    }
+}
+
+function voirOperationsById($idProduit){
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT * FROM operations WHERE idProduit = :id");
+    $bv1 = $monObjPdoStatement->bindValue(':id', $idProduit);
+
+    if ($monObjPdoStatement->execute()) {
+        return $monObjPdoStatement->fetch();
+
+    }
+    else{
+        throw new Exception("Erreur dans la requête");
+    }
+}
+function deleteOperation($id){
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("DELETE FROM `operations` WHERE `idOperation` = :id");
+    $bv1 = $monObjPdoStatement->bindValue(':id', $id);
+
+    $execution = $monObjPdoStatement->execute();
+    return $execution;
+}
+
 function creeProduit($nom, $objectif, $information, $effetIndesirable, $photo)
 {
     $pdoStatement = PdoGsb::$monPdo->prepare("INSERT INTO produit(id,nom,objectif,information,effetIndesirable,photo) " . "
@@ -719,8 +769,35 @@ function creeProduit($nom, $objectif, $information, $effetIndesirable, $photo)
     $bv5 = $pdoStatement->bindValue(':laPhoto',$photo);
 
     $execution = $pdoStatement->execute();
+
+    $monObjPdoStatement=PdoGsb::$monPdo->prepare("SELECT `AUTO_INCREMENT`
+FROM  INFORMATION_SCHEMA.TABLES
+WHERE TABLE_SCHEMA = 'gsbextranetgroupe'
+AND   TABLE_NAME   = 'produit';");
+    if ($monObjPdoStatement->execute()) {
+        $newId = $monObjPdoStatement->fetch();
+    }
+
+    $this->creeOperation($newId[0]-1, $_SESSION['id'], $_SERVER['REMOTE_ADDR'], " création duproduit");
     return $execution;
     
+}
+
+function updateProduit($id, $nom, $objectif, $information, $effetIndesirable, $photo)
+{
+
+    $pdoStatement = PdoGsb::$monPdo->prepare("UPDATE produit SET nom=:leNom,objectif=:lObjectif,information=:lInfo,effetIndesirable=:lEffet,photo=:laPhoto WHERE id=:leId");
+    $bv1 = $pdoStatement->bindValue(':leId', $id);
+    $bv1 = $pdoStatement->bindValue(':leNom', $nom);
+    $bv2 = $pdoStatement->bindValue(':lObjectif', $objectif);
+    $bv3 = $pdoStatement->bindValue(':lInfo', $information);
+    $bv4 = $pdoStatement->bindValue(':lEffet', $effetIndesirable);
+    $bv5 = $pdoStatement->bindValue(':laPhoto',$photo);
+    $this->creeOperation($id, $_SESSION['id'], $_SERVER['REMOTE_ADDR'], " modification du produit");
+
+    $execution = $pdoStatement->execute();
+    return $execution;
+
 }
 
 function voirProduit(){
@@ -737,7 +814,7 @@ function voirProduit(){
 function voirProduitById($id){
     $pdo = PdoGsb::$monPdo;
     $monObjPdoStatement=$pdo->prepare("SELECT * FROM produit WHERE id = :id");
-    $bv1 = $pdoStatement->bindValue(':id', $id);
+    $bv1 = $monObjPdoStatement->bindValue(':id', $id);
 
     if ($monObjPdoStatement->execute()) {
         return $monObjPdoStatement->fetch();
@@ -749,11 +826,14 @@ function voirProduitById($id){
 }
 
 function deleteProduit($id){
+    foreach ($this->voirOperationsById($id) as $item) {
+        $this->deleteOperation($item[0]);
+    }
     $pdo = PdoGsb::$monPdo;
-    $monObjPdoStatement=$pdo->prepare("DELETE * FROM `produit` WHERE `id` = :id");
-    $bv1 = $pdoStatement->bindValue(':id', $id);
+    $monObjPdoStatement=$pdo->prepare("DELETE FROM `produit` WHERE `id` = :id");
+    $bv1 = $monObjPdoStatement->bindValue(':id', $id);
 
-    $execution = $pdoStatement->execute();
+    $execution = $monObjPdoStatement->execute();
     return $execution;
 }
 

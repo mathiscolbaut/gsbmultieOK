@@ -37,6 +37,8 @@ else {
         <th scope="col">Effets indésirables</th>
         <th scope="col">Modification</th>
         <th scope="col">Suppression</th>
+        <?php if($_SESSION['idRole']==5) echo '<th scope="col">Actions récentes</th>'?>
+
     </tr>
     </thead>
     <tbody>
@@ -45,6 +47,7 @@ else {
 
 
 <?php
+
 $produits = $pdo->voirProduit();
 for ($i = 0; $i < count($produits); $i++) {
  if ($produits[$i][0] != null) {
@@ -54,8 +57,10 @@ for ($i = 0; $i < count($produits); $i++) {
      echo '<td>'.$produits[$i][2].'</td>';
      echo '<td>'.$produits[$i][3].'</td>';
      echo '<td>'.$produits[$i][4].'</td>';
-     echo '<td><a href="index.php?page=produit&id='.$produits[$i][0].'">Modifier le produit</a></td>';
+     echo '<td><a href="index.php?uc=produit&action=demandeModif&id='.$produits[$i][0].'">Modifier le produit</a></td>';
      echo '<td><a href="index.php?uc=produit&action=suppression&id='.$produits[$i][0].'">Supprimer le produit</a></td>';
+     if($_SESSION['idRole']==5)
+     echo '<td><a href="index.php?uc=produit&action=voirProduitModifications&id='.$produits[$i][0].'">Modifications recentes</a></td>';
      echo '</tr>';
  }
 }

@@ -4,8 +4,7 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="index.php?uc=produit&action=voirProduit">Voir liste des produits</a>
-        <a class="dropdown-item" href="index.php?uc=produit&action=demandeAjout">Gérer les produits</a>
-    </div>
+        <a class="dropdown-item" href="index.php?uc=produit&action=demandeAjout">Créer un produits</a>
 </li>
 
 <li class="nav-item dropdown">

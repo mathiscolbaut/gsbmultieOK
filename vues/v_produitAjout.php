@@ -3,7 +3,7 @@ if (!$_SESSION['id'])
 header('Location: ../index.php');
 else {
 ?>
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -49,7 +49,15 @@ else {
 
 <div class="page-content">
     <div class="row">
-
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
         <?php include('v_footer.php'); ?>
 
         <?php };?>
