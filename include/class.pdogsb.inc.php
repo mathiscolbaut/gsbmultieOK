@@ -708,6 +708,56 @@ function changeinfosmedecin($id,$nom,$prenom,$password){
 
 }
 
+function creeProduit($nom, $objectif, $information, $effetIndesirable, $photo)
+{
+    $pdoStatement = PdoGsb::$monPdo->prepare("INSERT INTO produit(id,nom,objectif,information,effetIndesirable,photo) " . "
+    VALUES (null, :leNom, :lObjectif, :lInfo, :lEffet, :laPhoto)");
+    $bv1 = $pdoStatement->bindValue(':leNom', $nom);
+    $bv2 = $pdoStatement->bindValue(':lObjectif', $objectif);
+    $bv3 = $pdoStatement->bindValue(':lInfo', $information);
+    $bv4 = $pdoStatement->bindValue(':lEffet', $effetIndesirable);
+    $bv5 = $pdoStatement->bindValue(':laPhoto',$photo);
+
+    $execution = $pdoStatement->execute();
+    return $execution;
+    
+}
+
+function voirProduit(){
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT * FROM produit");
+    if ($monObjPdoStatement->execute()) {
+        return $monObjPdoStatement->fetchAll();
+    }
+    else{
+        throw new Exception("Erreur dans la requête");
+    }
+}
+
+function voirProduitById($id){
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("SELECT * FROM produit WHERE id = :id");
+    $bv1 = $pdoStatement->bindValue(':id', $id);
+
+    if ($monObjPdoStatement->execute()) {
+        return $monObjPdoStatement->fetch();
+
+    }
+    else{
+        throw new Exception("Erreur dans la requête");
+    }
+}
+
+function deleteProduit($id){
+    $pdo = PdoGsb::$monPdo;
+    $monObjPdoStatement=$pdo->prepare("DELETE * FROM `produit` WHERE `id` = :id");
+    $bv1 = $pdoStatement->bindValue(':id', $id);
+
+    $execution = $pdoStatement->execute();
+    return $execution;
+}
 
 }
+
+
 ?>

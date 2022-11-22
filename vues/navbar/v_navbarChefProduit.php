@@ -3,8 +3,8 @@
         Produits
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#">Voir liste des produits</a>
-        <a class="dropdown-item" href="#">Gérer les produits</a>
+        <a class="dropdown-item" href="index.php?uc=produit&action=voirProduit">Voir liste des produits</a>
+        <a class="dropdown-item" href="index.php?uc=produit&action=demandeAjout">Gérer les produits</a>
     </div>
 </li>
 

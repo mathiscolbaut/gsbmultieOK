@@ -1,6 +1,7 @@
 <?php
 require_once("include/fct.inc.php");
 require_once ("include/class.pdogsb.inc.php");
+require_once("include/Upload.php");
 session_start();
 
 
@@ -10,6 +11,7 @@ date_default_timezone_set('Europe/Paris');
 
 
 $pdo = PdoGsb::getPdoGsb();
+$upload = new Upload(array('png', 'jpeg', 'jpg', 'gif'), 'assets/img/uploads', 500000);
 $estConnecte = estConnecte();
 if(!isset($_GET['uc'])){
      $_GET['uc'] = 'connexion';
@@ -44,6 +46,10 @@ switch($uc){
 
 	case 'notfound':{
 		include("controleurs/c_notfound.php");break;
+	}
+
+	case 'produit':{
+		include("controleurs/c_produit.php");break;
 	}
 
 	

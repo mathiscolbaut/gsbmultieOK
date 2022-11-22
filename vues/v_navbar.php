@@ -54,7 +54,7 @@
                   $roleNom = "Validateur";
                   break;
               case 4:
-                  $roleNom = "Chef de projet";
+                  $roleNom = "Chef produit";
 
                   break;
               case 5:
