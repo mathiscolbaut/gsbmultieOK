@@ -1,0 +1,20 @@
+Bonsoir Madame, notre projet est terminé.
+Ci-joint les comptes pour se connecter aux différents roles (les mots de passe sont hashé):
+-
+Medecin: Email: medecin.test@test.fr MDP: medecin62138#
+Validateur: Email: validateur.test@test.fr MDP: medecin62138#
+Moderateur: Email: moderateur.test@test.fr MDP: medecin62138#
+ChefProduit: Email: chefproduitt.test@test.fr MDP: medecin62138#
+
+Installations:
+Pour installer le site il vous suffira d'importer la base de donnée en local, et dans class.pdo.inc.php de rentrer vos informations vers votre BDD. Pour installer le site il vous suffira d'importer la base de donnée en local, et dans class.pdo.inc.php de rentrer vos informations.
+
+Vérifiez bien que votre fonction mail() sur php est correctement configuré si vous souhaitez recevoir les emails.
+
+PS: Dans le Github, nous fournissons notre BDD commune qui est sur la site de Rémi, afin de gagner du temps vous pouvez vous y connecter https://remi-becquaert.fr/phpmyadmin/ via l'username "gsb2" et le mot de passe "gsb2".
+Fonctionnement
+
+Suite à votre question ci-dessus, nous assignons les roles dans la table "Medecin" en utilisant une clé étrangère provenant de "roles".
+Si vous avez le moindre problème(s) ou questions, n'hésitez pas j'essayerais d'y répondre le plus rapidement possible.
+Lien vers notre Trello:  https://trello.com/b/VqAneJjC/gsbextranet-php
+Lien vers notre Github: https://github.com/mathiscolbaut/gsbmultieOK (utilisez bien celui là nous avons eu plusieurs projets !!!)
